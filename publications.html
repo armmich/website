@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publications | Anil Menon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+<noscript><link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet"></noscript>
+<style>
+  :root {
+    --bg: #ffffff;
+    --text: #3c4043;
+    --muted: #80868b;
+    --accent: #1a73e8;
+    --accent-light: #e8f0fe;
+    --border: #dadce0;
+    --award: #7a5c2b;
+    --award-bg: #fdf6ec;
+    --media-color: #188038;
+    --link: #1a73e8;
+    --journal-color: #c5221f;
+    --c-topic:       #1a73e8;
+    --c-data:        #9334e6;
+    --c-geography:   #188038;
+    --c-methodology: #e37400;
+    --c-year:        #80868b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Roboto', sans-serif;
+    background: transparent;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+
+  /* ── Layout ── */
+  .container { max-width: 100%; margin: 0; padding: 0 0 3rem; }
+
+  h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.75rem; font-weight: 400;
+    letter-spacing: -0.01em; margin-bottom: 0.3rem;
+    margin-top: 0;
+    color: #202124;
+  }
+  .subtitle { color: var(--muted); font-size: 0.88rem; font-style: italic; margin-bottom: 2rem; }
+
+  /* ── Filter Panel ── */
+  .filter-panel {
+    margin-bottom: 1.6rem;
+  }
+
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  /* Dropdown trigger buttons */
+  .filter-dropdown {
+    position: relative;
+    display: inline-block;
+  }
+
+  .filter-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: #fff;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.12s, color 0.12s, background 0.12s;
+    white-space: nowrap;
+  }
+  .filter-trigger:hover { border-color: #aab; color: var(--text); }
+  .filter-trigger.has-active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+  .filter-trigger .caret { font-size: 0.6rem; opacity: 0.6; transition: transform 0.15s; }
+  .filter-trigger.open .caret { transform: rotate(180deg); }
+  .filter-trigger .active-count {
+    background: var(--accent);
+    color: #fff;
+    font-size: 0.65rem;
+    border-radius: 100px;
+    padding: 0 0.35rem;
+    line-height: 1.5;
+    font-weight: 600;
+  }
+
+  /* Dropdown menu */
+  .filter-menu {
+    display: none;
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+    padding: 0.5rem;
+    z-index: 100;
+    min-width: 160px;
+  }
+  .filter-menu.open { display: block; }
+
+  .chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    padding: 0.35rem 0.6rem;
+    border-radius: 5px;
+    border: none;
+    background: transparent;
+    color: var(--text);
+    user-select: none;
+    transition: background 0.1s;
+    white-space: nowrap;
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    text-align: left;
+  }
+  .chip:hover { background: #f1f3f4; }
+  .chip.active { background: var(--accent-light); color: var(--accent); font-weight: 500; }
+  .chip .check { font-size: 0.7rem; opacity: 0; width: 0.8rem; flex-shrink: 0; }
+  .chip.active .check { opacity: 1; }
+
+  /* Active filter chips shown inline */
+  .active-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    align-items: center;
+  }
+  .active-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.73rem;
+    font-family: 'Roboto', sans-serif;
+    padding: 0.18rem 0.5rem 0.18rem 0.65rem;
+    border-radius: 100px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .active-chip[data-group="topic"]       { background: #e8f0fe; color: var(--c-topic); }
+  .active-chip[data-group="data"]        { background: #f3e8fd; color: var(--c-data); }
+  .active-chip[data-group="geography"]   { background: #e6f4ea; color: var(--c-geography); }
+  .active-chip[data-group="methodology"] { background: #fef3e2; color: var(--c-methodology); }
+  .active-chip[data-group="year"]        { background: #f1f3f4; color: var(--c-year); }
+  .active-chip .remove { font-size: 0.75rem; opacity: 0.6; }
+  .active-chip:hover .remove { opacity: 1; }
+
+  /* Results bar */
+  .results-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 0.5rem;
+  }
+  .results-count {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .results-count strong { color: var(--text); font-weight: 500; }
+  .clear-btn {
+    font-size: 0.78rem; color: var(--muted);
+    cursor: pointer; background: none; border: none;
+    font-family: 'Roboto', sans-serif; padding: 0;
+    text-decoration: underline; text-underline-offset: 2px;
+    transition: color 0.13s;
+  }
+  .clear-btn:hover { color: var(--text); }
+
+  /* ── Publication list ── */
+  .pub-list { display: flex; flex-direction: column; }
+
+  .pub-item {
+    display: grid;
+    grid-template-columns: 2.4rem 1fr;
+    gap: 0 1rem;
+    padding: 1.6rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .pub-item:last-child { border-bottom: none; }
+  .pub-item.hidden { display: none; }
+
+  /* ── Year dividers ── */
+  .year-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 1.6rem 0 0.4rem;
+    color: var(--muted);
+  }
+  .year-divider span {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .year-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .year-divider.hidden { display: none; }
+
+  .pub-number {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1rem; color: var(--muted);
+    text-align: right; padding-top: 1px; font-weight: 300;
+  }
+
+  .pub-citation {
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem; line-height: 1.5;
+    margin-bottom: 0.5rem; color: var(--text);
+  }
+  .pub-citation strong em {
+    color: var(--journal-color);
+    font-size: 1.05rem;
+    font-weight: 400;
+  }
+
+  .pub-citation a {
+    color: var(--link); text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.15s;
+  }
+  .pub-citation a:hover { border-color: var(--link); }
+
+  /* Article title */
+  .pub-citation > a {
+    font-size: 1.08rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .pub-tags { display: flex; flex-wrap: wrap; gap: 0.28rem; margin-bottom: 0.5rem; }
+  .pub-tag {
+    font-size: 0.67rem; font-weight: 500;
+    padding: 0.1rem 0.48rem;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
+  }
+  .pub-tag:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+  }
+  .pub-tag.topic       { background: #e8f0fe; color: var(--c-topic); }
+  .pub-tag.data        { background: #f3e8fd; color: var(--c-data); }
+  .pub-tag.geography   { background: #e6f4ea; color: var(--c-geography); }
+  .pub-tag.methodology { background: #fef3e2; color: var(--c-methodology); }
+
+  /* Tag highlight mode */
+  #pub-list.tag-highlight-mode .pub-item {
+    transition: opacity 0.25s, border-left 0.25s;
+    opacity: 0.22;
+  }
+  #pub-list.tag-highlight-mode .pub-item.tag-match {
+    opacity: 1;
+    border-left: 3px solid var(--tag-hl-color, var(--accent));
+    padding-left: calc(0.8rem - 3px);
+  }
+
+  /* Row hover dimming */
+  #pub-list.row-highlight-mode .pub-item {
+    transition: opacity 0.2s;
+    opacity: 0.22;
+  }
+  #pub-list.row-highlight-mode .pub-item.row-match {
+    opacity: 1;
+  }
+  .pub-tag.tag-locked {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+  /* Dismiss hint shown during highlight */
+  #tag-hint {
+    display: none;
+    font-size: 0.73rem;
+    color: var(--muted);
+    font-style: italic;
+    padding: 0.3rem 0;
+    margin-bottom: 0.6rem;
+  }
+  #tag-hint.visible { display: block; }
+
+  .pub-links { display: flex; flex-wrap: wrap; gap: 0.38rem; margin-bottom: 0.5rem; }
+  .pub-link {
+    display: inline-flex; align-items: center;
+    font-size: 0.78rem; font-weight: 500;
+    padding: 0.2rem 0.6rem; border-radius: 4px;
+    text-decoration: none;
+    background: var(--accent-light); color: var(--accent);
+    border: 1px solid #a8c7fa;
+    transition: background 0.14s, color 0.14s;
+  }
+  .pub-link:hover { background: var(--accent); color: #fff; }
+
+  .pub-award {
+    display: block;
+    font-size: 0.79rem; color: var(--award); background: var(--award-bg);
+    border-left: 2px solid var(--award);
+    padding: 0.2rem 0.6rem;
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 0.45rem; font-style: italic;
+  }
+
+  .pub-media { font-size: 0.82rem; color: var(--media-color); margin-bottom: 0.3rem; }
+  .pub-media strong { font-weight: 500; }
+  .pub-media a { color: var(--media-color); text-decoration: underline; text-underline-offset: 2px; }
+  .pub-media a:hover { opacity: 0.7; }
+
+  .abstract-toggle {
+    font-size: 0.78rem; color: var(--muted);
+    cursor: pointer; background: none; border: none;
+    padding: 0; margin-top: 0.2rem;
+    font-family: 'Roboto', sans-serif;
+    transition: color 0.15s;
+  }
+  .abstract-toggle:hover { color: var(--text); }
+
+  .abstract-content {
+    display: none;
+    font-size: 0.95rem; color: var(--muted);
+    margin-top: 0.6rem; line-height: 1.65;
+    padding: 0.75rem 1rem;
+    background: #f1f3f4; border-radius: 4px;
+    font-family: 'Crimson Pro', serif;
+  }
+  .abstract-content.open { display: block; }
+
+
+  /* ── Publication type badge ── */
+  .pub-type {
+    display: inline-block;
+    font-size: 0.67rem; font-weight: 500;
+    padding: 0.1rem 0.55rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 0.45rem;
+    font-family: 'Roboto', sans-serif;
+  }
+  .pub-type.article      { background: #e8f0fe; color: #1a73e8; border: 1px solid #a8c7fa; }
+  .pub-type.policy-brief { background: #fef3e2; color: #e37400; border: 1px solid #fdd663; }
+  .pub-type.comic        { background: #f3e8fd; color: #9334e6; border: 1px solid #d7a8f0; }
+
+
+  /* ── Online-first badge ── */
+  .pub-status {
+    display: inline-block;
+    font-size: 0.67rem; font-weight: 500;
+    padding: 0.1rem 0.55rem;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    font-family: 'Roboto', sans-serif;
+    background: #e6f4ea; color: #188038;
+    border: 1px solid #a8d5b5;
+    vertical-align: middle;
+    margin-left: 0.4rem;
+  }
+
+
+  /* ── Altmetric + Dimensions badges ── */
+  .pub-badges {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+    min-height: 24px;
+    flex-wrap: wrap;
+  }
+  .pub-badges .altmetric-embed { display: inline-block; }
+  .__dimensions_badge_embed__ { display: inline-block; }
+
+  .no-results {
+    display: none; padding: 3rem 0;
+    text-align: center; color: var(--muted);
+    font-style: italic;
+    font-family: 'Crimson Pro', serif; font-size: 1.05rem;
+  }
+  .no-results.visible { display: block; }
+</style>
+</head>
+<body>
+
+
+<div class="container">
+  <h1>Publications</h1>
+  <p class="subtitle">Click titles to view article · Click "Abstract" to expand · Use filters to browse by topic, data, geography, or method</p>
+
+  <!-- ── Filter Panel ── -->
+  <div class="filter-panel">
+    <div class="filter-bar">
+      <span style="font-size:0.9rem;color:var(--muted);font-weight:700;white-space:nowrap;margin-right:0.15rem;">Filter by:</span>
+      <!-- Topic dropdown -->
+      <div class="filter-dropdown" id="dd-topic">
+        <div class="filter-trigger" onclick="toggleDropdown('topic')">
+          Topic <span class="caret">▼</span>
+        </div>
+        <div class="filter-menu" id="menu-topic">
+          <div class="chip" data-group="topic" data-value="ai" onclick="toggleChip(this)"><span class="check">✓</span>AI</div>
+          <div class="chip" data-group="topic" data-value="democracy" onclick="toggleChip(this)"><span class="check">✓</span>Democracy</div>
+          <div class="chip" data-group="topic" data-value="economic-history" onclick="toggleChip(this)"><span class="check">✓</span>Economic History</div>
+          <div class="chip" data-group="topic" data-value="health" onclick="toggleChip(this)"><span class="check">✓</span>Health</div>
+          <div class="chip" data-group="topic" data-value="immigration" onclick="toggleChip(this)"><span class="check">✓</span>Immigration</div>
+          <div class="chip" data-group="topic" data-value="ipe" onclick="toggleChip(this)"><span class="check">✓</span>IPE</div>
+          <div class="chip" data-group="topic" data-value="populism" onclick="toggleChip(this)"><span class="check">✓</span>Populism</div>
+          <div class="chip" data-group="topic" data-value="rhetoric" onclick="toggleChip(this)"><span class="check">✓</span>Rhetoric &amp; Persuasion</div>
+        </div>
+      </div>
+
+      <!-- Geography dropdown -->
+      <div class="filter-dropdown" id="dd-geography">
+        <div class="filter-trigger" onclick="toggleDropdown('geography')">
+          Geography <span class="caret">▼</span>
+        </div>
+        <div class="filter-menu" id="menu-geography">
+          <div class="chip" data-group="geography" data-value="asia" onclick="toggleChip(this)"><span class="check">✓</span>Asia</div>
+          <div class="chip" data-group="geography" data-value="europe" onclick="toggleChip(this)"><span class="check">✓</span>Europe</div>
+          <div class="chip" data-group="geography" data-value="middle-east" onclick="toggleChip(this)"><span class="check">✓</span>Middle East</div>
+          <div class="chip" data-group="geography" data-value="usa" onclick="toggleChip(this)"><span class="check">✓</span>USA</div>
+        </div>
+      </div>
+
+      <!-- Data dropdown -->
+      <div class="filter-dropdown" id="dd-data">
+        <div class="filter-trigger" onclick="toggleDropdown('data')">
+          Data <span class="caret">▼</span>
+        </div>
+        <div class="filter-menu" id="menu-data">
+          <div class="chip" data-group="data" data-value="administrative" onclick="toggleChip(this)"><span class="check">✓</span>Administrative</div>
+          <div class="chip" data-group="data" data-value="archival" onclick="toggleChip(this)"><span class="check">✓</span>Archival</div>
+          <div class="chip" data-group="data" data-value="spatial" onclick="toggleChip(this)"><span class="check">✓</span>Spatial</div>
+          <div class="chip" data-group="data" data-value="surveys" onclick="toggleChip(this)"><span class="check">✓</span>Surveys</div>
+        </div>
+      </div>
+
+      <!-- Methodology dropdown -->
+      <div class="filter-dropdown" id="dd-methodology">
+        <div class="filter-trigger" onclick="toggleDropdown('methodology')">
+          Methodology <span class="caret">▼</span>
+        </div>
+        <div class="filter-menu" id="menu-methodology">
+          <div class="chip" data-group="methodology" data-value="art" onclick="toggleChip(this)"><span class="check">✓</span>Art</div>
+          <div class="chip" data-group="methodology" data-value="experiments" onclick="toggleChip(this)"><span class="check">✓</span>Experiments</div>
+          <div class="chip" data-group="methodology" data-value="observational" onclick="toggleChip(this)"><span class="check">✓</span>Observational</div>
+          <div class="chip" data-group="methodology" data-value="review" onclick="toggleChip(this)"><span class="check">✓</span>Review</div>
+        </div>
+      </div>
+
+      <!-- Year dropdown -->
+      <div class="filter-dropdown" id="dd-year">
+        <div class="filter-trigger" onclick="toggleDropdown('year')">
+          Year <span class="caret">▼</span>
+        </div>
+        <div class="filter-menu" id="menu-year">
+          <div class="chip" data-group="year" data-value="online" onclick="toggleChip(this)"><span class="check">✓</span>Online First</div>
+          <div class="chip" data-group="year" data-value="forthcoming" onclick="toggleChip(this)"><span class="check">✓</span>Forthcoming</div>
+          <div class="chip" data-group="year" data-value="2025" onclick="toggleChip(this)"><span class="check">✓</span>2025</div>
+          <div class="chip" data-group="year" data-value="2024" onclick="toggleChip(this)"><span class="check">✓</span>2024</div>
+          <div class="chip" data-group="year" data-value="2023" onclick="toggleChip(this)"><span class="check">✓</span>2023</div>
+          <div class="chip" data-group="year" data-value="2022" onclick="toggleChip(this)"><span class="check">✓</span>2022</div>
+          <div class="chip" data-group="year" data-value="2021" onclick="toggleChip(this)"><span class="check">✓</span>2021</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active filter chips -->
+    <div class="active-filters" id="active-filters"></div>
+  </div>
+
+  <!-- Results bar -->
+  <div class="results-bar" id="results-bar" style="display:none">
+    <span class="results-count" id="results-count"></span>
+    <button class="clear-btn" id="clear-btn" onclick="clearAll()">Clear all filters</button>
+  </div>
+
+  <!-- ── Publication List ── -->
+  <!-- Ordering: reverse chronological, numbered 20 → 1 -->
+  <div id="tag-hint" class="">Click a tag to lock the highlight · click again or press <kbd style="font-style:normal;font-size:0.7rem;background:#eee;border:1px solid #ccc;border-radius:3px;padding:0 3px">Esc</kbd> to clear</div>
+  <div class="pub-list" id="pub-list">
+    <!-- 20 — Politics of Integrating Health Systems -->
+    <!-- 21 — Non-effect of partisan responses to mass shootings -->
+
+    <div class="year-divider" data-year="Online &amp; Forthcoming"><span>Online &amp; Forthcoming</span></div>
+    <div class="pub-item"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="observational"
+         data-year="online">
+      <div class="pub-number">22.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://www.isabelmperera.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Isabel Perera</a>, and <a href="https://publicpolicy.cornell.edu/brooks-people/meet-the-dean/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Colleen Barry</a>. Published online.
+          <a href="https://read.dukeupress.edu/jhppl/article/doi/10.1215/03616878-1231807/407400">The (Non) Effect of Partisan Responses to Mass Shootings on Public Opinion</a>.
+          <strong><em>Journal of Health Politics, Policy and Law</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Experts consider gun violence a public health crisis in the United States. Its increasing magnitude has pressured some Republican lawmakers to reconsider their responses to these events, moving away from sending condolences of "thoughts and prayers" to the victims and moving towards alternative, policy-oriented rhetoric. Ample literature in political science finds that how politicians speak about issues can shape voters' viewpoints on them. Could a Republican move away from "thoughts and prayers" rhetoric soften the cleavage on second amendment rights and lead to gun reform? Findings from a recent survey experiment suggest otherwise. Different rhetoric by Republican politicians did not move public opinion on firearm reform. There continues to be, however, substantial baseline support for several policies that would likely reduce gun violence. We comment on the implications of these findings on the politics of firearm policy reform in America.
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://www.psypost.org/republican-rhetoric-on-mass-shootings-does-not-change-public-opinion-on-gun-reform/">PsyPost</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="observational review"
+         data-year="forthcoming">
+      <div class="pub-number">21.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://www.nolankavanagh.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Nolan M. Kavanagh</a>, and <a href="https://hsph.harvard.edu/profile/adrianna-mcintyre/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Adrianna McIntyre</a>. Forthcoming.
+          The Politics of Integrating Health Systems and Public Programs.
+          <strong><em>European Journal of Public Health</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+          <span class="pub-tag methodology">Review</span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Amidst low trust in public institutions, policy makers and scholars have proposed using the health system to help rebuild trust in other institutions. One potential mechanism to do so is linking the health system with public programs, e.g. simple referrals, shared financing, or delivering social services via the health system. While other reviews have examined the technical aspects of such linkages, few have examined the political calculus involved. We conducted a narrative review of the academic and grey literature on the relationship between health and trust in public institutions, as well as political considerations when integrating health systems and social programs, including the attitudes, concerns, and constraints of beneficiaries, stakeholders (e.g. service providers), and political actors. For beneficiaries, attitudes about the health system are associated with attitudes about public institutions, and linking the health system to less popular public programs has been shown to increase engagement in the latter. However, unsuccessful handoffs and administratively burdensome social programs can alienate beneficiaries. Stakeholders are often eager to partner in linkages but can become frustrated by redundant roles and uncoordinated financing. For political actors, embedding social services in the health system may be logistically easier than maintaining standalone programs, but it may also result in weaker long-term public support. Thus, linking health systems and public programs can produce mutual "co-benefits" when done well. At the same time, policy makers must consider the political trade-offs inherent in the linkage. Future research should directly test whether these linkages causally impact broader social outcomes, such as political trust.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 19 — Borderline Democracy -->
+    <div class="pub-item" data-doi="10.1086/737687"
+         data-topic="immigration democracy"
+         data-data="administrative spatial"
+         data-geography="europe"
+         data-methodology="observational"
+         data-year="online">
+      <div class="pub-number">20.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.charasz.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Charasz, Pawel</a> and Anil Menon. Published online.
+          <a href="https://doi.org/10.1086/737687">Borderline Democracy? The Electoral Consequences of the 2021 State of Emergency on the Poland-Belarus Border</a>.
+          <strong><em>Journal of Politics</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag topic">Immigration</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag data">Administrative</span>
+          <span class="pub-tag data">Spatial</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://doi.org/10.7910/DVN/O0VMH6">📊 Replication Files</a>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1086/737687"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1086/737687" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Are citizens willing to compromise their civil liberties in pursuit of salient policy objectives? We tackle this question in the context of the 2021 migration crisis on the Poland-Belarus border. To curb migrant flows, Poland introduced a state of emergency, infringing on citizens' democratic freedoms. Drawing on 2019 and 2023 parliamentary elections, this registered report exploits the highly localized nature of these restrictions to investigate their electoral consequences. Using a difference-in-discontinuities design, we do not find evidence that voters punished the incumbent Law and Justice (PiS) for restricting their civil liberties. However, we cannot completely dismiss effects smaller than −3 to −4 percentage points of vote share. Even then, these findings are consistent with the notion that most voters may tolerate (though not reward) substantial infringements on civil liberties in return for decisive action on salient issues, providing one explanation for the growing use of strongman policies in democracies worldwide.
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://www.eurekalert.org/news-releases/1093116">EurekAlert</a> · <a href="https://phys.org/news/2025-07-borderline-democracy-voters-tolerated-restrictions.html">Phys.org</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1086/739200"
+         data-topic="ai ipe"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="experiments"
+         data-year="online">
+      <div class="pub-number">19.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil and <a href="https://baobaofzhang.github.io/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Baobao Zhang</a>. Published online.
+          <a href="https://www.journals.uchicago.edu/doi/10.1086/739200">Future Shock or Future Shrug? Public Responses to Varied Artificial Intelligence Development Timelines</a>.
+          <strong><em>Journal of Politics</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">AI</span>
+          <span class="pub-tag topic">IPE</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://dataverse.harvard.edu">📊 Replication Files</a>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1086/739200"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1086/739200" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          The increased pace of generative artificial intelligence (AI) development has prompted many experts to predict widespread workplace automation in the near future. We examine how messaging about different AI development timelines affects the public's views about workplace automation and policies to mitigate technological unemployment. Our survey experiment (N=2,440 U.S. adults) randomly assigned participants to a control group or one of three treatments, each presenting a different timeline for job loss due to "transformative AI" (2026, 2030, or 2060). Generally, shorter timelines did not increase concerns about job loss or support for universal basic income, limiting automation, or funding job retraining. The informational treatments, when pooled, increased concerns regarding technological unemployment but did not impact policy preferences. Our null results speak to a larger literature, which finds that making individuals feel more proximate to risks does not necessarily increase support for policies aimed at mitigating these risks.
+        </div>
+        <div class="pub-media"><strong>Media:</strong> <a href="https://www.eurekalert.org/news-releases/1103452">EurekAlert</a> · <a href="https://phys.org/news/2025-10-people-dont-jobs-ai-told.html">Phys.org</a></div>
+      </div>
+    </div>
+
+
+    <div class="year-divider" data-year="2025"><span>2025</span></div>
+    <div class="pub-item" data-doi="10.1080/09636412.2025.2537651"
+         data-topic="rhetoric"
+         data-data="surveys"
+         data-geography="europe usa middle-east"
+         data-methodology="experiments"
+         data-year="2025">
+      <div class="pub-number">18.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://www.yehonatanabramson.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Yehonatan Abramson</a>, <a href="https://www.deandulay.com/about" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Dean Dulay</a>, and <a href="https://lsa.umich.edu/polisci/people/faculty/pjluong.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Pauline Jones</a>. 2025.
+          <a href="https://doi.org/10.1080/09636412.2025.2537651">The Effect of Historical Analogies on Foreign Policy Attitudes</a>.
+          <strong><em>Security Studies</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Rhetoric & Persuasion</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag geography">Middle East</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1080/09636412.2025.2537651"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1080/09636412.2025.2537651" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Existing research points to the potential impact of historical analogies on domestic audiences, but it has not examined the effect of historical analogies on foreign publics. Using speeches by Ukrainian President Volodymyr Zelensky after Russia's February 2022 invasion, we investigated whether evoking salient events from the audience country's past effectively increased popular support for aiding Ukraine. We conducted survey experiments simultaneously in four countries where Zelensky delivered speeches rich in historical analogies: United Kingdom (WWII), United States (Pearl Harbor and 9/11), Germany and Israel (Holocaust). Exposure to excerpts from Zelensky's speeches triggered distinctive emotional reactions in all countries consistent with the tailored content. Only in Israel, however, where domestic assistance to Ukraine was perceived as insufficient, did exposure increase support for aiding Ukraine.
+        </div>
+      </div>
+    </div>
+
+  
+    <div class="pub-item"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="observational art"
+         data-year="2025">
+      <div class="pub-number">17.</div>
+      <div class="pub-body">
+        <span class="pub-type comic">Comic</span>
+        <div class="pub-citation">
+          Menon, Anil and Eli Africa. 2025.
+          <a href="https://escholarship.org/uc/item/8j2394vx">The Politics of Pain</a>.
+          <strong><em>eScholarship</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Art</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          This comic illustrates how individual health can shape political thought and action. It examines how a chance decline in health can shape an individual's perception of the world around them and in turn shape their political attitudes and behaviors. It is based on the following peer-reviewed article: Kavanagh, NM, Menon, A, Heinze JE. Does Health Vulnerability Predict Voting for Right-Wing Populist Parties in Europe? American Political Science Review. 2021;115(3):1104-1109.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1016/j.lanepe.2025.101289"
+         data-topic="health democracy populism"
+         data-data="surveys"
+         data-geography="europe"
+         data-methodology="observational review"
+         data-year="2025">
+      <div class="pub-number">16.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://www.nolankavanagh.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Nolan M. Kavanagh</a>, <a href="https://eurohealthobservatory.who.int/about-us/staff/biography/michelle-anna-maria-falkenbach" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Michelle Falkenbach</a>, <a href="https://eurohealthobservatory.who.int/about-us/staff/biography/matthias-wismar" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Matthias Wismar</a>, and <a href="https://sph.umich.edu/faculty-profiles/greer-scott.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Scott L. Greer</a>. 2025.
+          <a href="https://www.sciencedirect.com/science/article/pii/S2666776225001188">The Role of Health and Health Systems in Shaping Political Engagement and Rebuilding Trust in Democratic Institutions</a>.
+          <strong><em>The Lancet Regional Health – Europe</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+          <span class="pub-tag methodology">Review</span>
+        </div>
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1016/j.lanepe.2025.101289"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1016/j.lanepe.2025.101289" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Around the world, institutional trust is declining while democratic discontent is rising. What role do health and health systems play in this crisis? We review decades of interdisciplinary research to describe how health and health systems are linked to democratic trust and engagement. We find that poor individual health and poor health system performance are associated with lower trust in political institutions and lower democratic participation. We propose a framework for understanding health's influence on democracy and outline an agenda for policy and research to strengthen the relationship between health, health systems, and democratic institutions.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1111/ajps.12846"
+         data-topic="rhetoric"
+         data-data="surveys"
+         data-geography="middle-east"
+         data-methodology="experiments"
+         data-year="2025">
+      <div class="pub-number">15.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.yehonatanabramson.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Abramson, Yehonatan</a>, Anil Menon, and <a href="https://en.ir.huji.ac.il/people/abir-gitlin" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Abir Gitlin</a>. 2025.
+          <a href="https://onlinelibrary.wiley.com/doi/10.1111/ajps.12846">Whose Critique Matters? The Effects of Critic Identity and Audience on Public Opinion</a>.
+          <strong><em>American Journal of Political Science</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Rhetoric & Persuasion</span>
+          <span class="pub-tag geography">Middle East</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://doi.org/10.7910/DVN/SLNPAB">📊 Replication Files</a>
+        </div>
+        <div class="pub-award">2023 APSA Human Rights Section Best Paper Award</div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1111/ajps.12846"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1111/ajps.12846" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          When evaluating the impact of naming and shaming on public opinion regarding human rights, existing scholarship focuses on messages coming from ingroup or outgroup critics. Diaspora critics, increasingly vocal and visible in recent years, occupy an in-between identity. What, if any, is the impact of criticism coming from such critics? We address this question by fielding a pre-registered survey experiment in Israel, a country that routinely faces diasporic criticism. We find that exposure to criticism from both diaspora and foreign critics (but not from domestic critics) triggered a backlash response on the criticized issue (human rights) compared to a no criticism condition. However, diaspora critics have a slight advantage over foreigners—their intentions for criticizing the state are perceived as more positive. Despite limited direct impact on public opinion, our findings suggest that the human rights regime could benefit from involving diasporic and domestic actors in their efforts.
+        </div>
+        <div class="pub-media"><strong>Media:</strong> <a href="https://ajps.org/2024/03/12/whose-critique-matters-the-effects-of-critic-identity-and-audience-on-public-opinion/">AJPS Summary</a></div>
+      </div>
+    </div>
+
+
+    <div class="year-divider" data-year="2024"><span>2024</span></div>
+    <div class="pub-item" data-doi="10.1093/poq/nfae047"
+         data-topic="health populism democracy"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="observational"
+         data-year="2024">
+      <div class="pub-number">14.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.nolankavanagh.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Kavanagh, Nolan M.</a> and Anil Menon. 2024.
+          <a href="https://academic.oup.com/poq/article-abstract/88/4/1269/8011627">The Impact of Experiences with COVID-19 on the 2020 Presidential Election and Support for Health Reform</a>.
+          <strong><em>Public Opinion Quarterly</em></strong>. 88 (4): 1269–1282.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://doi.org/10.7910/DVN/BW66QP">📊 Replication Files</a>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1093/poq/nfae047"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1093/poq/nfae047" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Health shocks may drive the public to support policies and candidates that protect health and well-being. Did the COVID-19 pandemic, as one such shock, shift preferences for health reform in the United States? Using nationally representative surveys of over 70,000 US adults between 2019 and 2020, we find that experiences with COVID-19—measured at both the individual and community levels—increased support for Medicare for All by multiple percentage points. Consistent with partisan entrenchment on health issues, independents and weak partisans drove the association at the individual level; these subgroup differences were not observed for community-level experiences. To reduce concerns about confounding, we use data from multiple points in time to establish the expected temporal relationship between experiences with COVID-19 and support for health reform.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item"
+         data-topic="health democracy populism"
+         data-data="surveys"
+         data-geography="europe"
+         data-methodology="observational review"
+         data-year="2024">
+      <div class="pub-number">13.</div>
+      <div class="pub-body">
+        <span class="pub-type policy-brief">Policy Brief</span>
+        <div class="pub-citation">
+          Menon, Anil and <a href="https://www.nolankavanagh.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Nolan M. Kavanagh</a>. 2024.
+          <a href="https://eurohealthobservatory.who.int/publications/i/health-as-a-driver-of-political-participation-and-preferences-implications-for-policy-makers-and-political-actors">Health as a Driver of Political Participation and Preferences: Implications for Policy Makers and Political Actors</a>.
+          <strong><em>European Observatory on Health Systems and Policies</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+          <span class="pub-tag methodology">Review</span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Health is central to people's lives yet an under-appreciated influence on politics. People in poor health often have negative, stigmatizing experiences with public institutions which undermine their trust in the health system, government and democracy. People with poor health and disabilities are less likely to vote. Limited mobility, financial constraints and social stigma all act as barriers to participating in the democratic process. Declines in the health of individuals and their communities have been linked to support for anti-democratic values and fringe political parties.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1017/S0007123424000152"
+         data-topic="ipe"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="experiments"
+         data-year="2024">
+      <div class="pub-number">12.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil and <a href="https://sites.google.com/a/umich.edu/iainosgood/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Iain Osgood</a>. 2024.
+          <a href="https://www.cambridge.org/core/journals/british-journal-of-political-science/article/wrong-winners-anticorporate-animus-and-attitudes-towards-trade/21286514DB694C0EF559E9A409EDF25F">The Wrong Winners: Anti-Corporate Animus and Attitudes Towards Trade</a>.
+          <strong><em>British Journal of Political Science</em></strong>. 54(4): 1180–1197.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">IPE</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://doi.org/10.7910/DVN/GYXVPQ">📊 Replication Files</a>
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://blogs.lse.ac.uk/usappblog/2024/06/14/negativity-toward-big-business-is-contributing-to-the-backlash-against-globalization/">LSE USAPP Blog</a>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1017/S0007123424000152"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1017/S0007123424000152" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Globalization creates winners and losers, and recent research emphasizes that large corporations are among the biggest beneficiaries of trade while smaller firms may be harmed. How do these redistributive effects impact trade attitudes? Because a growing share of Americans hold highly unfavourable views of big corporations, we argue that the belief that large firms win from trade will provoke hostility towards trade and globalization. To test this theory, we show experimentally that informing people that large corporations benefit from trade makes them markedly more hostile towards trade compared to a treatment emphasizing that firms in exporting industries benefit. Using subgroup and mediation analysis, we find that anti-corporate sentiment, particularly concern about corporations' power in society, drives this effect. Our findings illustrate how distributive consequences and attitudes towards the winners and losers from policy change interact to shape public opinion on economic policy.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1017/psrm.2024.6"
+         data-topic="ipe"
+         data-data="surveys"
+         data-geography="usa"
+         data-methodology="experiments"
+         data-year="2024">
+      <div class="pub-number">11.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://lsa.umich.edu/polisci/people/graduate-students/nissenk.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Katie Nissen</a>, and <a href="https://sites.google.com/a/umich.edu/iainosgood/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Iain Osgood</a>. 2024.
+          <a href="https://www.cambridge.org/core/journals/political-science-research-and-methods/article/climate-regulations-effects-on-businesses-and-public-support-for-climate-action/D38F5DE559519C442B512FCF91CCA63D">Climate Regulation's Effects on Businesses and Public Support for Climate Action</a>.
+          <strong><em>Political Science Research and Methods</em></strong>.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">IPE</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1017/psrm.2024.6"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1017/psrm.2024.6" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          How do the effects of climate regulation on businesses impact public attitudes toward climate policy? While emissions intensity is the primary frame for understanding the effects of climate policy on business, theoretical scholarship and public discourse often emphasize that large firms will adjust to climate regulations easily while smaller firms will struggle. Because small businesses are sympathetic and large firms are unpopular, individuals who view climate regulation's effects in line with this firm size account should be less likely to support climate change mitigation. To test this theory, we conduct an original survey of climate policy beliefs and then a survey experiment. We find evidence that distaste for large corporations increases opposition to climate action among people exposed to the idea that big companies can more easily navigate climate regulations than small companies.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1016/j.vaccine.2024.01.006"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="asia"
+         data-methodology="experiments"
+         data-year="2024">
+      <div class="pub-number">10.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://lsa.umich.edu/polisci/people/faculty/ahicken.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Allen Hicken</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/pjluong.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Pauline Jones</a>, and <a href="https://sph.umich.edu/faculty-profiles/rozek-laura.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Laura Rozek</a>. 2024.
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0264410X24000069">Can Endorsement by Religious Leaders Move the Needle on Vaccine Hesitancy?</a>
+          <strong><em>Vaccine</em></strong>. 42(4): 918–923.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Experiments</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1016/j.vaccine.2024.01.006"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1016/j.vaccine.2024.01.006" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          This paper tests whether endorsements from religious leaders can reduce vaccine hesitancy. Using pre-registered survey experiments in Muslim-majority (Pakistan) and Catholic-majority (Philippines) countries, we find limited evidence that religious leader endorsements increase COVID-19 vaccine acceptance compared to endorsements from medical practitioners. We find some evidence that explicit religious framing—framing vaccine acceptance as consistent with religious teaching—reduces vaccine acceptance among the vaccine hesitant in the Philippines. We also find that religious leader endorsements are not uniformly persuasive, with our results depending on the valence and source of the endorsement.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="year-divider" data-year="2023"><span>2023</span></div>
+    <div class="pub-item" data-doi="10.5509/202396185"
+         data-topic="populism democracy"
+         data-data="surveys administrative"
+         data-geography="asia"
+         data-methodology="observational"
+         data-year="2023">
+      <div class="pub-number">9.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.deandulay.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Dulay, Dean</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/ahicken.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Allen Hicken</a>, Anil Menon, and <a href="https://www.dlsu.edu.ph/colleges/cla/academic-departments/political-science/faculty-profile/ronald-d-holmes/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Ronald D. Holmes</a>. 2023.
+          <a href="https://www.ingentaconnect.com/content/paaf/paaf/2023/00000096/00000001/art00004">Continuity, History, and Identity: Why Bongbong Marcos Won the 2022 Philippine Presidential Election</a>.
+          <strong><em>Pacific Affairs</em></strong>. 96(1): 85–104.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Administrative</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.5509/202396185"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.5509/202396185" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <div class="pub-media"><strong>Media:</strong> <a href="https://www.washingtonpost.com/politics/2022/05/06/bongbong-marcos-duterte-philippines-election-may9/">Washington Post Monkey Cage</a> · <a href="https://news.cornell.edu/stories/2023/03/philippine-study-analyzes-marcos-family-return-power">Cornell Chronicle</a> · <a href="https://phys.org/news/2023-03-marcos-family-power-philippines.html">Phys.org</a></div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          In May of 2022, Bongbong Marcos won a commanding 59 percent of the vote to become president of the Philippines. His victory was, on some level, shocking to scholars and analysts of Philippine politics. As a result, a plethora of different theories have been proposed, in an attempt to explain why Marcos won. In this paper, we use nationally representative survey data to explore which factors predict (and do not predict) voting intention for Marcos. We find that, a) support for former President Rodrigo Duterte, b) positive perceptions of the late President Ferdinand Marcos and martial law, and c) ethnic (linguistic) identity are strong predictors of voting for Bongbong Marcos. On the other hand, age, education, and income are not. Consequently, theories based on continuity, coalition, history, and identity provide the most leverage on the question of why Bongbong Marcos won the election.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1355/cs44-3d"
+         data-topic="rhetoric"
+         data-data="surveys"
+         data-geography="asia"
+         data-methodology="observational"
+         data-year="2023">
+      <div class="pub-number">8.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.deandulay.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Dulay, Dean</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/ahicken.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Allen Hicken</a>, Anil Menon, and <a href="https://www.dlsu.edu.ph/colleges/cla/academic-departments/political-science/faculty-profile/ronald-d-holmes/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Ronald D. Holmes</a>. 2023.
+          <a href="https://www.jstor.org/stable/27193042">How Do Filipinos Remember Their History? A Descriptive Account of Filipino Historical Memory</a>.
+          <strong><em>Contemporary Southeast Asia</em></strong>. 44 (3): 482–514.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Rhetoric & Persuasion</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1355/cs44-3d"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1355/cs44-3d" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          How do Filipinos remember their history? To date this question still has no systematic answer. This article provides quantitative, descriptive results from two nationally representative surveys that show how Filipinos view three of the country's major historical events: the Spanish colonization of the Philippines; martial law under President Ferdinand Marcos; and the 1986 People Power Revolution. The descriptive results include several takeaways, including: first, the modal response towards all three events was indifference (versus positive or negative feelings); second, positive feelings towards martial law were highest among those who were alive at that time; third, the distribution of feelings towards these historical events was similar across individuals with different educational achievement; and finally, a surprising proportion of respondents expressed positive feelings towards both martial law and People Power. We discuss the potential limitations of our study and conclude by considering the implications of these results for the Philippines' contemporary politics.
+        </div>
+        <div class="pub-media"><strong>Media:</strong> <a href="https://news.cornell.edu/stories/2023/03/philippine-study-analyzes-marcos-family-return-power">Cornell Chronicle</a> · <a href="https://phys.org/news/2023-03-marcos-family-power-philippines.html">Phys.org</a></div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1177/00104140221141833"
+         data-topic="immigration economic-history populism democracy"
+         data-data="administrative spatial"
+         data-geography="europe"
+         data-methodology="observational"
+         data-year="2023">
+      <div class="pub-number">7.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil. 2023.
+          <a href="https://journals.sagepub.com/doi/full/10.1177/00104140221141833">The Political Legacy of Forced Migration: Evidence from Post-WWII Germany</a>.
+          <strong><em>Comparative Political Studies</em></strong>. 56(9).
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Immigration</span>
+          <span class="pub-tag topic">Economic History</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag data">Administrative</span>
+          <span class="pub-tag data">Spatial</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <div class="pub-links">
+          <a class="pub-link" href="https://dataverse.harvard.edu/dataset.xhtml?persistentId=doi:10.7910/DVN/POANLF">📊 Replication Files</a>
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://theconversation.com/postwar-forced-resettlement-of-germans-echoes-through-the-decades-137219">The Conversation</a>
+        </div>
+        <div class="pub-award">2020–21 Eldersveld Award (University of Michigan)</div>
+        <div class="pub-award">2022 Malcolm Jewell Award (SPSA)</div>
+        <div class="pub-award">2022 Best Paper in Political Behavior (MPSA)</div>
+        <div class="pub-award">2022 Best Paper by a Graduate Student (MPSA)</div>
+        <div class="pub-award">2022 Best Paper in European Politics &amp; Society (APSA)</div>
+        <div class="pub-award">2024 Frances Rosenbluth Best Paper Prize (CPS)</div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1177/00104140221141833"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1177/00104140221141833" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Do refugees reshape long-term political behavior in receiving areas? I argue that forced migration can foster a strong group identity among refugees, which can mobilize them toward political parties that champion their identity-based grievances. To test this argument, I examine how one of the largest forced migrations in modern history, the expulsion of ethnic Germans from Eastern Europe into Germany after WWII, shaped their electoral behavior over time. Using an original database of district-level data from 32 elections spanning a century, I find that communities which received greater shares of expellees remain more supportive of the expellees' political champions—the radical right—over time. This relationship is particularly manifested when identity-based grievances are unresolved and politically salient. Mechanism evidence, including novel data on expellee monuments and associations, suggests that a durable expellee identity helps account for these results.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="year-divider" data-year="2022"><span>2022</span></div>
+    <div class="pub-item" data-doi="10.1093/ej/ueab089"
+         data-topic="economic-history"
+         data-data="archival spatial"
+         data-geography="asia"
+         data-methodology="observational"
+         data-year="2022">
+      <div class="pub-number">6.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://sites.google.com/umich.edu/dincecco" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Dincecco, Mark</a>, <a href="https://www.jamesfenske.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">James Fenske</a>, Anil Menon, and <a href="https://www.shivajimukherjee.org/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Shivaji Mukherjee</a>. 2022.
+          <a href="https://academic.oup.com/ej/advance-article/doi/10.1093/ej/ueab089/6429308">Pre-Colonial Warfare and Long-Run Development in India</a>.
+          <strong><em>Economic Journal</em></strong>. 132 (643): 981–1010.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Economic History</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Archival</span>
+          <span class="pub-tag data">Spatial</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1093/ej/ueab089"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1093/ej/ueab089" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Does pre-colonial history—and in particular the role of interstate warfare—help explain long-run development patterns across India? To address this question, we construct a new geocoded database of historical conflicts on the Indian subcontinent. We document a robust positive relationship between pre-colonial conflict exposure and local economic development today. Drawing on archival and secondary data, we show that districts that were more exposed to pre-colonial conflict experienced greater early state-making, followed by lower political violence and higher investments in physical and human capital in the long term.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1016/j.asw.2022.100677"
+         data-topic=""
+         data-data="administrative"
+         data-geography="usa"
+         data-methodology="observational"
+         data-year="2022">
+      <div class="pub-number">5.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Godfrey, Jason, Anil Menon, Andrew Moos, Laura Romaine, Michelle Sprouse, and Theresa Tinkle. 2022.
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S1075293522000678">(In)Equities in Directed Self-Placement</a>.
+          <strong><em>Assessing Writing</em></strong>. 54: 100677.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Administrative</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1016/j.asw.2022.100677"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1016/j.asw.2022.100677" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          This article responds to the need for ongoing assessments of equity in directed self-placement (DSP) by reporting on a quantitative, empirical self-study at Michigan that draws on developments in the field of race and writing assessment. We find evidence that the DSP process at this institution results in the unintended disproportionate placement and enrollment of domestic under-represented minority (URM) students and women in a pre-first-year-writing course, which means that they take two courses rather than one to fulfill the requirement.
+        </div>
+      </div>
+    </div>
+
+    <div class="pub-item" data-doi="10.1111/jssr.12804"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="asia"
+         data-methodology="observational"
+         data-year="2022">
+      <div class="pub-number">4.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil and <a href="https://lsa.umich.edu/polisci/people/faculty/pjluong.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Pauline Jones</a>. 2022.
+          <a href="https://onlinelibrary.wiley.com/doi/full/10.1111/jssr.12804">Trust in Religious Leaders and Voluntary Compliance: Lessons from Social Distancing during COVID-19 in Central Asia</a>.
+          <strong><em>Journal for the Scientific Study of Religion</em></strong>. 61(3).
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1111/jssr.12804"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1111/jssr.12804" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          What is the relationship between trust in religious leaders and compliance with policies that are costly to the individual? Religious leaders often have the moral authority to affect individuals' willingness to adopt prosocial behaviors. Yet, that influence can be either positive or negative because religious leaders face mixed incentives to encourage compliance and their leadership is often decentralized. We argue that greater trust in religious leaders will increase compliance in countries with a dominant religion and centralized religious authority because religious leaders will offer a coherent message that aligns with state directives. We test this claim in the context of pandemic-related social distancing policies in Kyrgyzstan and Kazakhstan, countries which are predominantly Muslim and have centralized Muslim religious institutions. We find a positive association between trust in religious leaders and social distancing behaviors, even after adjusting for other measures of trust and sociodemographic factors.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="year-divider" data-year="2021"><span>2021</span></div>
+    <div class="pub-item" data-doi="10.3389/ijph.2021.636255"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="europe usa asia"
+         data-methodology="observational"
+         data-year="2021">
+      <div class="pub-number">3.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://sites.google.com/a/umich.edu/rozeklab/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Rozek, Laura S.</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/pjluong.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Pauline Jones</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/ahicken.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Allen Hicken</a>, Anil Menon, Seth Apsley, and Emily J. King. 2021.
+          <a href="https://doi.org/10.3389/ijph.2021.636255">Understanding Vaccine Hesitancy in the Context of COVID-19: The Role of Trust and Confidence in a Seventeen-Country Survey</a>.
+          <strong><em>International Journal of Public Health</em></strong>. 66.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.3389/ijph.2021.636255"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.3389/ijph.2021.636255" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://www.washingtonpost.com/politics/2021/06/14/how-do-you-persuade-skeptics-get-vaccinated-trust-matters-more-than-information/?fbclid=IwAR0Ysps06VMjr6UBtDXs0qspBZuzsqs1JFds3kaoYbtF9dR2Rnt8TLgG0CQ">Monkey Cage / Washington Post</a>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">&#9656; Abstract</button>
+        <div class="abstract-content">
+          Objectives: Vaccine hesitancy is a growing global public health concern that has intensified during the COVID-19 pandemic. Using a 17-country survey, we investigate the role of trust and confidence in COVID-19 vaccine acceptance. Methods: Multivariate logistic regression was applied to a sample of 13,426 respondents across 17 countries surveyed in mid-2020. Results: We find consistent, positive associations between trust in government, trust and confidence in scientists and health authorities and vaccine acceptance. These relationships are robust across most countries. Trust and confidence in scientists and health authorities are more consistent predictors of vaccine acceptance than trust in government. Discussion: Identifying the factors that predict COVID-19 vaccine acceptance can help direct policy responses. Our results suggest that trust and confidence in scientists and health authorities are important predictors of vaccine acceptance during the COVID-19 pandemic.
+        </div>
+      </div>
+    </div>
+    <div class="pub-item" data-doi="10.1371/journal.pone.0256159"
+         data-topic="health"
+         data-data="surveys"
+         data-geography="asia europe usa"
+         data-methodology="observational"
+         data-year="2021">
+      <div class="pub-number">2.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          Menon, Anil, <a href="https://lsa.umich.edu/polisci/people/faculty/ahicken.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Allen Hicken</a>, <a href="https://lsa.umich.edu/polisci/people/faculty/pjluong.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Pauline Jones</a>, and <a href="https://sph.umich.edu/faculty-profiles/rozek-laura.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Laura Rozek</a>. 2021.
+          <a href="https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0256159">Global Adoption of Personal and Social Mitigation Behaviors during COVID-19: The Role of Trust and Confidence</a>.
+          <strong><em>PLOS ONE</em></strong>. 16(9): e0256159.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag geography">Asia</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag geography">USA</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1371/journal.pone.0256159"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1371/journal.pone.0256159" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          The COVID-19 pandemic prompted many governments to enact measures requiring significant behavior change. However, many individuals did not respond uniformly to these calls for action. Using survey data collected across 13 countries from June to September 2020 (N=13,426), we examine the relationship between trust and confidence in governments, scientists, and health authorities and the adoption of COVID-19 mitigation behaviors. In adjusted logistic regression models, we find consistent, positive associations between trust and confidence and the adoption of both personal (e.g. handwashing) and social (e.g. staying home) mitigation behaviors. Effects are stronger and more consistent for trust and confidence in scientists and health authorities than for governments. Our results are robust across most countries, with some notable exceptions.
+        </div>
+      </div>
+    </div>
+
+
+    <div class="pub-item" data-doi="10.1017/S0003055421000265"
+         data-topic="health populism democracy"
+         data-data="surveys"
+         data-geography="europe"
+         data-methodology="observational"
+         data-year="2021">
+      <div class="pub-number">1.</div>
+      <div class="pub-body">
+        <span class="pub-type article">Research Article</span>
+        <div class="pub-citation">
+          <a href="https://www.nolankavanagh.com/" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Kavanagh, Nolan M.</a>, Anil Menon, and <a href="https://sph.umich.edu/faculty-profiles/heinze-justin.html" style="color:inherit;border-bottom:1px dotted currentColor;text-decoration:none;">Justin E. Heinze</a>. 2021.
+          <a href="https://www.doi.org/10.1017/S0003055421000265">Does Health Vulnerability Predict Voting for Right-Wing Populist Parties in Europe?</a>
+          <strong><em>American Political Science Review</em></strong>. 115 (3): 1104–1109.
+        </div>
+        <div class="pub-tags">
+          <span class="pub-tag topic">Health</span>
+          <span class="pub-tag topic">Populism</span>
+          <span class="pub-tag topic">Democracy</span>
+          <span class="pub-tag geography">Europe</span>
+          <span class="pub-tag data">Surveys</span>
+          <span class="pub-tag methodology">Observational</span>
+        </div>
+        <div class="pub-links">
+        
+          <a class="pub-link" href="https://doi.org/10.7910/DVN/LIXQUW">📊 Replication Files</a>
+        </div>
+        <div class="pub-media">
+          <strong>Media:</strong> <a href="https://www.washingtonpost.com/politics/2021/04/28/no-pandemic-didnt-sink-populism-it-might-have-helped-it/">Monkey Cage / Washington Post</a>
+        </div>
+        
+        <div class="pub-badges">
+          <div class="altmetric-embed" data-badge-type="donut" data-badge-popover="right" data-hide-no-mentions="true" data-doi="10.1017/S0003055421000265"></div>
+          <span class="__dimensions_badge_embed__" data-doi="10.1017/S0003055421000265" data-style="small_circle" data-hide-zero-citations="true" data-legend="hover-right"></span>
+        </div>
+        <button class="abstract-toggle" onclick="toggleAbstract(this)">▸ Abstract</button>
+        <div class="abstract-content">
+          Why do voters in developed democracies support right-wing populist parties? Existing research focuses on economic and cultural vulnerability as driving this phenomenon. We hypothesize that perceptions of personal health vulnerability might have a similar influence on voters. To test this argument, we analyzed all waves of the European Social Survey (2002–2020). Our findings suggest that voters with worse self-reported health were significantly more likely to vote for right-wing populist parties. The relationship persists even after accounting for measures of cultural and economic vulnerability, as well as voters' satisfaction with both their personal lives and their country's health system. The influence of health on support for right-wing populist parties appears to be greater than that of income and self-reported economic insecurity, while less than that of gender and attitudes about immigrants.
+        </div>
+      </div>
+    </div>
+</div><!-- /pub-list -->
+
+  <div class="no-results" id="no-results">No publications match the selected filters.</div>
+
+</div><!-- /container -->
+
+<script>
+const filters = { topic: new Set(), data: new Set(), geography: new Set(), methodology: new Set(), year: new Set() };
+
+const groupLabels = { topic: 'Topic', data: 'Data', geography: 'Geography', methodology: 'Methodology', year: 'Year' };
+
+// Toggle dropdown open/close
+function toggleDropdown(group) {
+  const menu = document.getElementById('menu-' + group);
+  const trigger = menu.previousElementSibling;
+  const isOpen = menu.classList.toggle('open');
+  trigger.classList.toggle('open', isOpen);
+
+  // Close all other dropdowns
+  document.querySelectorAll('.filter-menu.open').forEach(m => {
+    if (m.id !== 'menu-' + group) {
+      m.classList.remove('open');
+      m.previousElementSibling.classList.remove('open');
+    }
+  });
+}
+
+// Close all dropdowns when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('.filter-dropdown')) {
+    document.querySelectorAll('.filter-menu.open').forEach(m => {
+      m.classList.remove('open');
+      m.previousElementSibling.classList.remove('open');
+    });
+  }
+});
+
+function toggleChip(chip) {
+  const { group, value } = chip.dataset;
+  const isActive = chip.classList.toggle('active');
+  if (isActive) {
+    filters[group].add(value);
+  } else {
+    filters[group].delete(value);
+  }
+  updateTrigger(group);
+  renderActiveChips();
+  applyFilters();
+}
+
+function updateTrigger(group) {
+  const trigger = document.querySelector(`#dd-${group} .filter-trigger`);
+  const count = filters[group].size;
+  const hasActive = count > 0;
+  trigger.classList.toggle('has-active', hasActive);
+
+  // Rebuild trigger content
+  const countBadge = hasActive ? ` <span class="active-count">${count}</span>` : '';
+  trigger.innerHTML = `${groupLabels[group]}${countBadge} <span class="caret">▼</span>`;
+}
+
+function renderActiveChips() {
+  const container = document.getElementById('active-filters');
+  container.innerHTML = '';
+  Object.entries(filters).forEach(([group, vals]) => {
+    vals.forEach(val => {
+      // Get display label from the chip
+      const chipEl = document.querySelector(`.chip[data-group="${group}"][data-value="${val}"]`);
+      const label = chipEl ? chipEl.textContent.replace('✓', '').trim() : val;
+      const el = document.createElement('span');
+      el.className = 'active-chip';
+      el.dataset.group = group;
+      el.dataset.value = val;
+      el.innerHTML = `${label} <span class="remove">×</span>`;
+      el.addEventListener('click', () => {
+        filters[group].delete(val);
+        const chip = document.querySelector(`.chip[data-group="${group}"][data-value="${val}"]`);
+        if (chip) chip.classList.remove('active');
+        updateTrigger(group);
+        renderActiveChips();
+        applyFilters();
+      });
+      container.appendChild(el);
+    });
+  });
+}
+
+function clearAll() {
+  document.querySelectorAll('.chip.active').forEach(c => c.classList.remove('active'));
+  Object.keys(filters).forEach(k => { filters[k].clear(); updateTrigger(k); });
+  renderActiveChips();
+  applyFilters();
+}
+
+function applyFilters() {
+  const hasAny = Object.values(filters).some(s => s.size > 0);
+  const resultsBar = document.getElementById('results-bar');
+  resultsBar.style.display = hasAny ? 'flex' : 'none';
+
+  const items = document.querySelectorAll('#pub-list .pub-item');
+  let visible = 0;
+
+  items.forEach(item => {
+    const passes = Object.entries(filters).every(([group, selected]) => {
+      if (selected.size === 0) return true;
+      const itemVals = new Set((item.dataset[group] || '').trim().split(/\s+/).filter(Boolean));
+      return [...selected].some(v => itemVals.has(v));
+    });
+    item.classList.toggle('hidden', !passes);
+    if (passes) visible++;
+  });
+
+  // Hide year dividers if no visible papers follow them
+  document.querySelectorAll('.year-divider').forEach(divider => {
+    let next = divider.nextElementSibling;
+    let hasVisible = false;
+    while (next && !next.classList.contains('year-divider')) {
+      if (next.classList.contains('pub-item') && !next.classList.contains('hidden')) {
+        hasVisible = true;
+        break;
+      }
+      next = next.nextElementSibling;
+    }
+    divider.classList.toggle('hidden', !hasVisible);
+  });
+
+  const countEl = document.getElementById('results-count');
+  countEl.innerHTML = hasAny ? `Showing <strong>${visible}</strong> of <strong>${items.length}</strong> papers` : '';
+  document.getElementById('no-results').classList.toggle('visible', visible === 0);
+}
+
+// Guard: badges are optional — suppress any init errors
+window.__altmetric_embed_init = window.__altmetric_embed_init || function(){};
+
+function toggleAbstract(btn) {
+  const panel = btn.nextElementSibling;
+  const open = panel.classList.toggle('open');
+  btn.textContent = (open ? '▾' : '▸') + ' Abstract';
+}
+
+// ── Tag highlight system ──────────────────────────────────────────────────
+
+// Color map: each tag category gets its CSS variable color
+const tagColors = {
+  topic:       getComputedStyle(document.documentElement).getPropertyValue('--c-topic').trim(),
+  data:        getComputedStyle(document.documentElement).getPropertyValue('--c-data').trim(),
+  geography:   getComputedStyle(document.documentElement).getPropertyValue('--c-geography').trim(),
+  methodology: getComputedStyle(document.documentElement).getPropertyValue('--c-methodology').trim(),
+};
+
+let lockedTag = null; // { text, category } when a tag is clicked/locked
+
+function getTagCategory(tagEl) {
+  for (const cat of ['topic','data','geography','methodology']) {
+    if (tagEl.classList.contains(cat)) return cat;
+  }
+  return 'topic';
+}
+
+function highlightTag(tagText, category, lock = false) {
+  const pubList = document.getElementById('pub-list');
+  const hint = document.getElementById('tag-hint');
+
+  pubList.classList.add('tag-highlight-mode');
+  pubList.style.setProperty('--tag-hl-color', tagColors[category] || 'var(--accent)');
+  hint.classList.add('visible');
+
+  // Match papers that contain this tag text
+  document.querySelectorAll('#pub-list .pub-item').forEach(item => {
+    const itemTags = [...item.querySelectorAll('.pub-tag')].map(t => t.textContent.trim().toLowerCase());
+    const matches = itemTags.includes(tagText.toLowerCase());
+    item.classList.toggle('tag-match', matches);
+  });
+
+  // Mark the locked tag element
+  if (lock) {
+    document.querySelectorAll('.pub-tag.tag-locked').forEach(t => t.classList.remove('tag-locked'));
+    document.querySelectorAll('.pub-tag').forEach(t => {
+      if (t.textContent.trim().toLowerCase() === tagText.toLowerCase()) {
+        t.classList.add('tag-locked');
+      }
+    });
+  }
+}
+
+function clearHighlight() {
+  const pubList = document.getElementById('pub-list');
+  pubList.classList.remove('tag-highlight-mode');
+  document.getElementById('tag-hint').classList.remove('visible');
+  document.querySelectorAll('#pub-list .pub-item').forEach(item => item.classList.remove('tag-match'));
+  document.querySelectorAll('.pub-tag.tag-locked').forEach(t => t.classList.remove('tag-locked'));
+  lockedTag = null;
+}
+
+// Wire up all tags
+document.querySelectorAll('.pub-tag').forEach(tag => {
+  const tagText = tag.textContent.trim();
+  const category = getTagCategory(tag);
+
+  // Hover: preview highlight (only if nothing is locked)
+  tag.addEventListener('mouseenter', () => {
+    if (!lockedTag) highlightTag(tagText, category, false);
+  });
+  tag.addEventListener('mouseleave', () => {
+    if (!lockedTag) clearHighlight();
+  });
+
+  // Click: lock/unlock highlight
+  tag.addEventListener('click', e => {
+    e.stopPropagation();
+    if (lockedTag && lockedTag.text.toLowerCase() === tagText.toLowerCase()) {
+      // Same tag clicked again → unlock
+      lockedTag = null;
+      clearHighlight();
+    } else {
+      lockedTag = { text: tagText, category };
+      highlightTag(tagText, category, true);
+    }
+  });
+});
+
+// Click outside pub-list to clear
+document.addEventListener('click', e => {
+  if (lockedTag && !e.target.closest('#pub-list') && !e.target.closest('.filter-dropdown')) {
+    clearHighlight();
+  }
+});
+
+// ── Row hover dimming ─────────────────────────────────────────────────────
+document.querySelectorAll('.pub-item').forEach(item => {
+  item.addEventListener('mouseenter', () => {
+    if (lockedTag) return; // tag highlight takes priority
+    const pubList = document.getElementById('pub-list');
+    pubList.classList.add('row-highlight-mode');
+    item.classList.add('row-match');
+  });
+  item.addEventListener('mouseleave', () => {
+    const pubList = document.getElementById('pub-list');
+    pubList.classList.remove('row-highlight-mode');
+    item.classList.remove('row-match');
+  });
+});
+
+// Escape key to clear
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && lockedTag) clearHighlight();
+});
+</script>
+
+<!-- Altmetric badge embed -->
+<script>window.addEventListener('load', function(){ var s=document.createElement('script'); s.src='https://d1bxh8uas1mnw7.cloudfront.net/assets/embed.js'; s.async=true; s.onerror=function(){console.warn('Altmetric badge unavailable');}; document.body.appendChild(s); });</script>
+<!-- Dimensions citation badge -->
+<script>window.addEventListener('load', function(){ var s=document.createElement('script'); s.src='https://badge.dimensions.ai/badge.js'; s.async=true; s.charset='utf-8'; s.onerror=function(){console.warn('Dimensions badge unavailable');}; document.body.appendChild(s); });</script>
+</body>
+</html>
